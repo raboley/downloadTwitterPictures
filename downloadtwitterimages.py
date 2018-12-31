@@ -70,6 +70,7 @@ def download_images(status, num_tweets, output_folder):
       # Only download if there is not a picture with the same name in the folder already
       file_name = os.path.split(media_url)[1]
       if not os.path.exists(os.path.join(output_folder, file_name)):
+        print(media_url)
         wget.download(media_url +":orig", out=output_folder+'/'+file_name)
         downloaded += 1
 
