@@ -1,5 +1,5 @@
 #!/bin/bash
-docker build --rm -f "Dockerfile" -t downloadtwitterpictures:latest .
+docker image build -t downloadtwitterpictures:latest .
 docker container run -it --rm downloadtwitterpictures:latest --username  NASA --num 10 --replies --retweets
 docker container run -it downloadtwitterpictures:latest --username Cloud_images --num 10 --replies --retweets
 docker exec -it downloadtwitterpictures:latest /bin/bash
