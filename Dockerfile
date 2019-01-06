@@ -28,6 +28,7 @@
 # #CMD /bin/bash -c "source activate myenv && python3 -m downloadtwitterpictures"
 FROM       python:3
 LABEL      maintainer="Russell Boley"
+EXPOSE     4000
 
 RUN        pip install tweepy
 RUN        pip install wget
