@@ -5,6 +5,9 @@ import json
 import wget
 import argparse
 import configparser
+import upload_images_to_s3
+
+push = upload_images_to_s3
 
 #TODO: Limit by number of tweets?
 def parse_arguments():
@@ -17,6 +20,7 @@ def parse_arguments():
   parser.add_argument('--retweets', default=False, action='store_true', help='Include retweets')
   parser.add_argument('--replies', default=False, action='store_true', help='Include replies')
   parser.add_argument('--output', default='pictures/', type=str, help='folder where the pictures will be stored')
+  parser.add_argument('--bucket', default='', type=str, help='aws s3 bucket where this should be uploaded')
 
   args = parser.parse_args()
   return args
@@ -57,7 +61,13 @@ def create_folder(output_folder):
   if not os.path.exists(output_folder):
       os.makedirs(output_folder)
 
-def download_images(status, num_tweets, output_folder):
+def download_images(status, num_tweets, output_folder, bucket):
+  if bucket == '':
+    download_images_local(status=status, num_tweets=num_tweets, output_folder=output_folder)
+  else:
+    download_images_s3(status, num_tweets, output_folder, bucket)
+
+def download_images_local(status, num_tweets, output_folder):
   create_folder(output_folder)
   downloaded = 0
 
@@ -73,6 +83,28 @@ def download_images(status, num_tweets, output_folder):
         print(media_url)
         wget.download(media_url +":orig", out=output_folder+'/'+file_name)
         downloaded += 1
+
+def download_images_s3(status, num_tweets, output_folder, bucket):
+  create_folder('temp')
+  downloaded = 0
+
+  for tweet_status in status:
+
+    if(downloaded >= num_tweets):
+      break
+
+    for media_url in tweet_media_urls(tweet_status):
+      # Only download if there is not a picture with the same name in the folder already
+      file_name = os.path.split(media_url)[1]
+      temp_full_path =  'temp/' + file_name
+      final_path = output_folder + '/' + file_name
+      if not push.file_exists_in_s3(bucket=bucket, filepath=final_path):
+        print(media_url)
+        wget.download(media_url +":orig", out=temp_full_path)
+        push.uploadfile(bucket=bucket, upload_file_full_path=final_path, local_filepath=temp_full_path)
+        downloaded += 1
+
+
 
 def download_images_by_user(api, username, retweets, replies, num_tweets, output_folder):
   status = tweepy.Cursor(api.user_timeline, screen_name=username, include_rts=retweets, exclude_replies=replies, tweet_mode='extended').items()
