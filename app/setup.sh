@@ -13,8 +13,10 @@ mkdir setup
 
 # Move the relevant files into setup directory
 echo "Moving config.cfg and function file(s) to setup dir"
-cp creds.json setup/config.cfg
-cp download_*.py setup/
+cp config.cfg setup/config.cfg
+cp download_twitter_photos.py setup/
+cp upload_images_to_s3.py setup/
+cp handler.py setup/
 cd ./setup
 
 # Install requirements 
