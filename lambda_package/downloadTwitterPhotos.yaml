@@ -7,6 +7,7 @@ Resources:
     Properties:
       Handler: handler.handler
       Runtime: python3.6
+      AutoPublishAlias: live
       CodeUri: .
       Description: ''
       MemorySize: 128

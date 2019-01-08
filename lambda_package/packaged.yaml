@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  downloadTwitterPhotos:
+    Properties:
+      AutoPublishAlias: live
+      CodeUri: s3://aslkfjaslekfje/ac6e0ac7607b52f510ef841405bba590
+      Description: ''
+      Handler: handler.handler
+      MemorySize: 128
+      Role: arn:aws:iam::187551275141:role/lambda_execution_s3_write
+      Runtime: python3.6
+      Timeout: 3
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
