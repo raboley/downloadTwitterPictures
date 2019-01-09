@@ -1,0 +1,34 @@
+service: fetch-file-and-store-in-s3-dark-cloud
+
+frameworkVersion: ">=1.1.0"
+
+custom:
+  bucket: dark-cloud-bucket
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: us-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+functions:
+  save:
+    handler: handler.save
+    environment:
+      BUCKET: ${self:custom.bucket}
+
+resources:
+ Resources:
+   NewResource:
+     Type: AWS::S3::Bucket
+     Properties:
+       BucketName: ${self:custom.bucket}
+ Outputs:
+    NewOutput:
+      Description: "Description for the output"
+      Value: "Some output value"

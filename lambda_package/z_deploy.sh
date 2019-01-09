@@ -1,2 +1,0 @@
-sam package --s3-bucket aslkfjaslekfje --template-file downloadTwitterPhotos.yaml --output-template-file packaged.yaml
-sam deploy --template-file packaged.yaml --stack-name downloadTwitterPhotos --capabilities CAPABILITY_IAM
