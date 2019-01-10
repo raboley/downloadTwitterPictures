@@ -2,12 +2,8 @@ import tweepy
 import os
 from tweepy import OAuthHandler
 import json
-import wget
 import argparse
 import configparser
-import upload_images_to_s3
-
-push = upload_images_to_s3
 
 #TODO: Limit by number of tweets?
 def parse_arguments():
@@ -44,7 +40,7 @@ def init_tweepy():
   tweepy.models.User.first_parse = tweepy.models.User.parse
   tweepy.models.User.parse = parse
 
-def authorise_twitter_api(config):
+def authorize_twitter_api(config):
   auth = OAuthHandler(config['DEFAULT']['consumer_key'], config['DEFAULT']['consumer_secret'])
   auth.set_access_token(config['DEFAULT']['access_token'], config['DEFAULT']['access_secret'])
   return auth
